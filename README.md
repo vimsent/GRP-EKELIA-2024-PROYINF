@@ -1,0 +1,2 @@
+# GRP-EKELIA-2024-PROYINF
+Proyecto de grupo EKELIA
