@@ -1,5 +1,5 @@
 # GRP-EKELIA-2024-PROYINF
-Proyecto de grupo EKELIA
+Proyecto de grupo EKELIA y
 Repositorio de los Skeliers!
 
 ### Los Skeliers
