@@ -7,3 +7,7 @@ Repositorio de los Skeliers!
 * Vicente Luongo    - 202073637-k
 * Tomás Valenzuela  - 201956594-k
 * José Vargas       - 202104687-9
+
+## WIKI
+
+Puede acceder a la [wiki](https://github.com/vimsent/GRP-EKELIA-2024-PROYINF/wiki) para conocer los detalles, objetivos y el estado actual de nuestro proyecto!
