@@ -1,25 +1,13 @@
-import React, { useState } from 'react';
-import DicomViewer from './DicomViewer';
-import './App.css';
+import React from 'react';
+import DicomViewer from './components/DicomViewer';
 
-function App() {
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <input type="file" onChange={handleFileChange} />
-        {selectedFile && <DicomViewer file={selectedFile} />}
-        <p>
-          Ekelia
-        </p>
-      </header>
+    <div>
+      
+      <DicomViewer />
     </div>
   );
-}
+};
 
 export default App;
