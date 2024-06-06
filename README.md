@@ -22,3 +22,7 @@ Utilizamos el framework React, ya que por su popularidad permite el encontrar ma
 Es un avance del HU de imagen en negativo, siendo esta nuestra primera HU a implementar porque es la más básica pero útil para los doctores
 
 Instrucciones de uso: Al no estar implementado en internet aún, se debe usar desde el Local Host, mediante comandos de React, "npm start" para ejecutar, redireccionado automáticamente a la página web donde debe subir la imagen tipo DICOM a editar
+
+## VIDEO PROTOTIPO
+Se adjunta el link para ver la prueba del prototipo. 
+https://youtu.be/QlE-aquQXwM
