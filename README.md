@@ -8,6 +8,7 @@ Repositorio de los Skeliers.
 - **Vicente Luongo:** 202073637-k
 - **José Vargas:** 202104687-9
 - **Fabian Miranda:** 202030515-3
+- **Cristóbal Tirado Morales:** 202104586-4
 
 ## Identificación del Proyecto Base (2024-1)
 
