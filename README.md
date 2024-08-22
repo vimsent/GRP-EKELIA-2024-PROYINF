@@ -1,72 +1,48 @@
-# Proyecto de Visualización y Procesamiento de Imágenes Médicas
+# Bulcanizaciones Gomes hmnos e hijos y nietos - Proyecto de Visualización y Procesamiento de Imágenes Médicas
 
 Proyecto del grupo **Bulcanizaciones Gomes hmnos e hijos y nietos**  
+Repositorio de los Skeliers.
 
-## Integrantes:
-- **integrante faltante:** 123123123
+## Integrantes del Grupo
+
 - **Vicente Luongo:** 202073637-k
 - **José Vargas:** 202104687-9
 - **Fabian Miranda:** 202030515-3
 
-## Descripción del Proyecto
+## Identificación del Proyecto Base (2024-1)
 
-Este proyecto tiene como objetivo desarrollar un software cuantitativo para la **visualización y procesamiento de imágenes médicas**. El software está diseñado para apoyar el diagnóstico médico, reduciendo errores derivados de la subjetividad en la interpretación de imágenes. Utiliza el estándar **DICOM** (Digital Imaging and Communications in Medicine) para garantizar la interoperabilidad en el almacenamiento y transmisión de imágenes médicas.
+Este proyecto es una continuación del trabajo realizado en el semestre 2024-1, cuyo objetivo principal es desarrollar un software cuantitativo para la **visualización y procesamiento de imágenes médicas**. Durante el semestre anterior, se avanzó en la creación de una interfaz básica y la implementación inicial de la funcionalidad de visualización de imágenes en 2D, utilizando el estándar **DICOM** para garantizar la interoperabilidad en el almacenamiento y transmisión de imágenes médicas.
 
-Este semestre continuamos el trabajo basado en los avances realizados en el semestre anterior, con el objetivo de mejorar y completar las funcionalidades existentes, así como añadir nuevas capacidades al sistema.
+Este semestre, continuamos desarrollando y mejorando el sistema con nuevas funcionalidades avanzadas, como la visualización 3D y herramientas de medición anatómica.
 
-## Estado Actual del Proyecto (Autoevaluación basada en SEMAT)
+## Autoevaluación del Estado del Proyecto (Basado en SEMAT)
 
 ### Oportunidad
 
 - **Estado actual:** Oportunidad reconocida  
-- **Justificación:** Existe una necesidad bien definida para este software en el ámbito médico, ya que tiene el potencial de mejorar significativamente la precisión del diagnóstico a través de imágenes médicas cuantitativas.
+- **Justificación:** Existe una clara necesidad para este software en el ámbito médico, ya que tiene el potencial de mejorar significativamente la precisión del diagnóstico mediante herramientas cuantitativas.
 
 ### Partes Interesadas
 
 - **Estado actual:** Partes interesadas identificadas  
-- **Justificación:** Las partes interesadas clave incluyen médicos, hospitales y centros de investigación que requieren herramientas más precisas y reproducibles para mejorar la imagenología médica.
+- **Justificación:** Los médicos, hospitales y centros de investigación han sido identificados como las partes interesadas clave que se beneficiarán de este software.
 
 ### Equipo
 
 - **Estado actual:** Equipo formado  
-- **Justificación:** El equipo está compuesto por desarrolladores con experiencia en Python, visualización de imágenes y estándares médicos, aunque es necesario que adquieran habilidades adicionales en la gestión y procesamiento de archivos DICOM.
+- **Justificación:** El equipo está compuesto por desarrolladores con experiencia en Python, React y tecnologías DICOM, aunque algunos miembros continúan desarrollando habilidades en procesamiento avanzado de imágenes.
 
 ### Trabajo
 
 - **Estado actual:** Trabajo iniciado  
-- **Justificación:** El equipo ha comenzado con la planificación y la implementación inicial del software, pero quedan varias funcionalidades clave por desarrollar, como la visualización 3D y las herramientas cuantitativas.
+- **Justificación:** Se ha comenzado con la planificación del semestre y la implementación de funcionalidades adicionales. El equipo está avanzando en la implementación de herramientas de visualización y análisis.
 
 ### Sistema de Software
 
 - **Estado actual:** Implementación inicial  
-- **Justificación:** El sistema ya puede visualizar imágenes en 2D y leer información de cabeceras DICOM, pero las funcionalidades avanzadas como las herramientas de análisis y la visualización en 3D aún están en desarrollo.
+- **Justificación:** El sistema ya puede visualizar imágenes en 2D y leer datos de cabeceras DICOM, pero las funcionalidades avanzadas, como la visualización en 3D y herramientas cuantitativas, siguen en desarrollo.
 
-## WIKI
-
-Puede acceder a la [wiki](https://github.com/vimsent/GRP-EKELIA-2024-PROYINF/wiki) para conocer los detalles, objetivos y el estado actual de nuestro proyecto.
-
-## INFORMACIÓN PROTOTIPO INTERFAZ DE USUARIO
-
-El prototipo presentado fue creado en la plataforma FIGMA y puede ser visto con mayor detalle en el siguiente enlace:
-
-[Prototipo Figma](https://www.figma.com/file/q4Eq5kdEaPJPOFDbUeS26A/SKELIERS?type=design&node-id=0%3A1&mode=design&t=Y94QbozGJY3uqXMI-1)
-
-## STACK DE DESARROLLO
-
-Utilizamos el framework **React**, ya que por su popularidad permite el encontrar mayor documentación para el desarrollo. Además, al funcionar como página web, permite que sea más accesible para los usuarios.
-
-Es un avance del HU de imagen en negativo, siendo esta nuestra primera HU a implementar porque es la más básica pero útil para los doctores.
-
-### Instrucciones de uso:
-
-Al no estar implementado en internet aún, se debe usar desde el Local Host, mediante comandos de React, ejecutando `npm start` para iniciar el proyecto. Esto redireccionará automáticamente a la página web donde debe subir la imagen tipo **DICOM** a editar.
-
-## VIDEO PROTOTIPO
-
-Se adjunta el link para ver la prueba del prototipo:  
-[Prototipo en YouTube](https://youtu.be/QlE-aquQXwM)
-
-## Alphas Prioritarios y Medidas para Avanzar
+## Alphas Prioritarios y Medidas para Alcanzar el Siguiente Estado
 
 ### Sistema de Software
 
@@ -74,9 +50,9 @@ Se adjunta el link para ver la prueba del prototipo:
 
 **Medidas a implementar:**
 
-- Completar las funcionalidades clave, como la **visualización 3D** y las **herramientas de medición anatómica**.
-- Validar el sistema con usuarios médicos para asegurar que cumple con las expectativas y necesidades del campo.
-- Optimizar la interfaz de usuario para facilitar la adopción del software en entornos clínicos.
+1. Completar las funcionalidades clave, como la **visualización 3D** y las **herramientas de medición anatómica**.
+2. Validar el sistema con usuarios médicos para asegurar que cumple con los estándares de precisión necesarios para los diagnósticos.
+3. Optimizar la interfaz de usuario para facilitar su uso en entornos médicos.
 
 ### Trabajo
 
@@ -84,9 +60,9 @@ Se adjunta el link para ver la prueba del prototipo:
 
 **Medidas a implementar:**
 
-- Dividir claramente las tareas entre los miembros del equipo y realizar un seguimiento continuo a través de una **metodología ágil** (Scrum/Kanban).
-- Establecer **revisiones de código regulares** y gestionar los riesgos potenciales de manera proactiva.
-- Definir hitos intermedios para medir el avance del proyecto y garantizar que las funcionalidades se implementen dentro de los plazos establecidos.
+1. Establecer un plan de trabajo claro con tareas asignadas a cada miembro del equipo, utilizando metodologías ágiles como Scrum o Kanban.
+2. Realizar revisiones de código regulares para asegurar la calidad del software y detectar errores temprano.
+3. Definir hitos de entrega para medir el avance y asegurar que las funcionalidades críticas sean completadas a tiempo.
 
 ## Riesgos Identificados
 
@@ -96,20 +72,36 @@ Se adjunta el link para ver la prueba del prototipo:
 - **Objetivo afectado:** Procesamiento y visualización de imágenes.
 - **Impacto:** Alto  
 - **Probabilidad de ocurrencia:** Media  
-- **Medidas de mitigación:** Realizar pruebas exhaustivas con múltiples archivos DICOM provenientes de diversas máquinas de imagenología médica.  
-- **Estado del riesgo:** Activo y no mitigado.
+- **Medidas de mitigación:** Realizar pruebas exhaustivas con archivos DICOM de distintas fuentes y mantener el software actualizado de acuerdo con los últimos estándares.
+- **Estado del riesgo:** Activo y no mitigado.  
+- **Exposición:** Alto (Impacto Alto x Probabilidad Media)
 
 ### 2. Retraso en la Implementación de la Visualización 3D
 
-- **Descripción del riesgo:** Debido a la complejidad técnica de la visualización en 3D y la rotación de volúmenes, existe el riesgo de que esta funcionalidad se retrase.
+- **Descripción del riesgo:** Debido a la complejidad técnica de la visualización en 3D, existe el riesgo de que esta funcionalidad se retrase.
 - **Objetivo afectado:** Cumplimiento del cronograma y entrega de funcionalidades clave.
 - **Impacto:** Alto  
 - **Probabilidad de ocurrencia:** Alta  
-- **Medidas de mitigación:** Dividir las tareas complejas en subtareas manejables.  
-- **Estado del riesgo:** Activo y mitigado parcialmente.
+- **Medidas de mitigación:** Dividir las tareas en subtareas manejables y asignar recursos adicionales cuando sea necesario.
+- **Estado del riesgo:** Activo y mitigado parcialmente.  
+- **Exposición:** Muy alto (Impacto Alto x Probabilidad Alta)
 
-## Cartas de Alphas
+### 3. Baja Adopción del Software por Parte de los Usuarios Finales
 
-### Alpha: Sistema de Software
+- **Descripción del riesgo:** El software podría no ser adoptado ampliamente por los médicos si la interfaz de usuario no es lo suficientemente intuitiva.
+- **Objetivo afectado:** Uso del software en entornos clínicos.
+- **Impacto:** Alto  
+- **Probabilidad de ocurrencia:** Baja  
+- **Medidas de mitigación:** Realizar pruebas de usabilidad y ajustar la interfaz según el feedback de los médicos.
+- **Estado del riesgo:** Activo y mitigado.  
+- **Exposición:** Medio (Impacto Alto x Probabilidad Baja)
 
-......
+### 4. Problemas de Desempeño en Sistemas con Recursos Limitados
+
+- **Descripción del riesgo:** El software podría no funcionar correctamente en sistemas con hardware desactualizado.
+- **Objetivo afectado:** Rendimiento del software.
+- **Impacto:** Medio  
+- **Probabilidad de ocurrencia:** Media  
+- **Medidas de mitigación:** Optimizar el código para mejorar el rendimiento en hardware de gama baja y ofrecer configuraciones ajustables.
+- **Estado del riesgo:** Activo y mitigado parcialmente.  
+- **Exposición:** Media (Impacto Medio x Probabilidad Media)
