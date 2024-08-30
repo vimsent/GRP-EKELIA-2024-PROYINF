@@ -41,7 +41,7 @@ Este semestre, continuamos desarrollando y mejorando el sistema con nuevas funci
 ### Sistema de Software
 
 - **Estado actual:** Implementación inicial  
-- **Justificación:** El sistema ya puede visualizar imágenes en 2D y leer datos de cabeceras DICOM, pero las funcionalidades avanzadas, como la visualización en 3D y herramientas cuantitativas, siguen en desarrollo.
+- **Justificación:** El sistema ya puede visualizar imágenes en 2D, pero las funcionalidades avanzadas, como la visualización en 3D y herramientas cuantitativas, siguen en desarrollo.
 
 ## Alphas Prioritarios y Medidas para Alcanzar el Siguiente Estado
 
