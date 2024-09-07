@@ -1,12 +1,18 @@
 import React from 'react';
+import cornerstone from 'cornerstone-core';
 
-const ColorMapButton = ({ colormapName, onClick }) => {
-  const handleClick = () => {
-    onClick(colormapName);
+const ColorMapButton = ({ map }) => {
+  const applyColorMap = () => {
+    const element = document.querySelector('.image-viewer');
+    const viewport = cornerstone.getViewport(element);
+    viewport.colormap = map;
+    cornerstone.setViewport(element, viewport);
   };
 
   return (
-    <button onClick={handleClick}>{colormapName}</button>
+    <button onClick={applyColorMap}>
+      {map.charAt(0).toUpperCase() + map.slice(1)}
+    </button>
   );
 };
 
