@@ -1,74 +1,186 @@
-/* styles.css */
+/* Contenedor principal dividido en sidebar a la izquierda e imagen a la derecha */
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #1b263b;
+  overflow: hidden; /* Evita el desbordamiento */
+}
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #1a1a2e;
-  color: #eaeaea;
+/* Sidebar fijo a la izquierda */
+.sidebar {
+  width: 250px;
+  background-color: #415a77;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  border-right: 2px solid #1f4068;
+  overflow: hidden; /* Evita el desbordamiento */
+}
+
+/* Estilo del visor de imagen */
+.image-viewer {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  background-color: #0d1b2a;
+  border: 2px solid #415a77;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  margin: 10px;
+  position: relative;
 }
 
-.container {
-  text-align: center;
+/* Estilo para la galería de miniaturas */
+.thumbnail-gallery {
+  width: 250px;
+  background-color: #1f4068;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 2px solid #415a77;
+  overflow: hidden; /* Evita el desbordamiento */
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
 }
 
-h1 {
-  color: #f5f5f5;
-  margin-bottom: 20px;
+/* Galería de miniaturas */
+.thumbnail-gallery .thumbnails {
+  overflow-y: auto;
+  height: calc(100% - 40px); /* Ajusta la altura de las miniaturas */
+  width: 100%;
 }
 
+/* Estilo para las miniaturas */
+.thumbnail-gallery .thumbnail {
+  margin-bottom: 5px;
+  width: 100%;
+  height: auto;
+}
+
+/* Estilo para las imágenes en miniatura */
+.thumbnail-gallery .thumbnail img {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+/* Estilo para los botones */
+button {
+  background-color: #1f4068;
+  color: #ffffff;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+  background-color: #2d4a6a;
+}
+
+.custom-file-upload {
+  cursor: pointer;
+  background-color: #1f4068;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.control-panel label {
+  display: block;
+  margin: 10px 0;
+}
+
+.default-button {
+  background-color: #e63946;
+}
+
+.default-button:hover {
+  background-color: #d62839;
+}
+
+/* Ocultar el input file original */
 input[type="file"] {
   display: none;
 }
 
-.custom-file-upload {
-  display: inline-block;
-  padding: 10px 20px;
-  cursor: pointer;
-  background-color: #162447;
-  color: #eaeaea;
-  border: 2px solid #1f4068;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  transition: background-color 0.3s ease;
-}
-
-.custom-file-upload:hover {
+.thumbnail-gallery {
+  width: 250px;
   background-color: #1f4068;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 2px solid #415a77;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  overflow-y: auto;
 }
 
-button {
-  padding: 10px 20px;
-  cursor: pointer;
-  background-color: #162447;
-  color: #eaeaea;
-  border: 2px solid #1f4068;
-  border-radius: 5px;
+.thumbnail-gallery .thumbnails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 20px;
-  transition: background-color 0.3s ease;
-  margin-right: 10px;
+  width: 100%;
 }
 
-button:hover {
-  background-color: #1f4068;
+.thumbnail-gallery .thumbnail {
+  margin-bottom: 5px;
+  width: 100%;
+  height: auto;
 }
 
-label {
-  display: block;
-  margin-top: 10px;
+.thumbnail-gallery .thumbnail img {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  object-fit: cover;
 }
-
+/* Estilo para las barras deslizantes (ranges) */
 input[type="range"] {
-  width: 300px;
-  margin: 10px 0;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  background: #1f4068;
+  border-radius: 5px;
+  outline: none;
+  opacity: 0.9;
+  transition: opacity 0.3s;
 }
 
-#dicom-image {
-  width: 512px;
-  height: 512px;
-  border: 2px solid #1f4068;
-  margin-top: 20px;
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background-color: #4a7c95;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]:hover {
+  opacity: 1;
 }
