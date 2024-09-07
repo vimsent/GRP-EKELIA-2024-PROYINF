@@ -1,10 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import cornerstone from 'cornerstone-core';
 import dicomParser from 'dicom-parser';
 import cornerstoneTools from 'cornerstone-tools';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
+import JSZip from 'jszip';
 import './styles.css';
-import ColorMapButton from './ColorMapButton'; // Importar el componente ColorMapButton
+import ColorMapButton from './ColorMapButton';
 
 cornerstoneTools.external.cornerstone = cornerstone;
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
@@ -20,37 +21,118 @@ const DicomViewer = () => {
   const [inverted, setInverted] = useState(false);
   const [showBrightnessContrastControls, setShowBrightnessContrastControls] = useState(false);
   const [showRGBControls, setShowRGBControls] = useState(false);
-  const [red, setRed] = useState(1);
-  const [green, setGreen] = useState(1);
-  const [blue, setBlue] = useState(1);
+  const [images, setImages] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const element = divRef.current;
-    cornerstone.enable(element);
+    if (element) {
+      cornerstone.enable(element);
 
-    return () => {
-      cornerstone.disable(element);
-    };
-  }, []);
+      // Add wheel event listener to handle image navigation
+      const handleWheel = (event) => {
+        if (event.deltaY > 0) {
+          nextImage();
+        } else {
+          prevImage();
+        }
+        event.preventDefault();
+      };
+
+      element.addEventListener('wheel', handleWheel);
+
+      return () => {
+        if (element) {
+          cornerstone.disable(element);
+          element.removeEventListener('wheel', handleWheel);
+        }
+      };
+    }
+  }, [images, currentImageIndex]);
+
+  useEffect(() => {
+    if (images.length > 0) {
+      loadImage(images[currentImageIndex]);
+    }
+  }, [currentImageIndex, images]);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      resetValues();
-      const imageId = cornerstoneWADOImageLoader.wadouri.fileManager.add(file);
-      cornerstone.loadImage(imageId).then((image) => {
-        cornerstone.displayImage(divRef.current, image);
-        updateViewport();
+      const zip = new JSZip();
+      const zipContent = await file.arrayBuffer();
+      const zipFile = await zip.loadAsync(zipContent);
+
+      const imageEntries = [];
+      zipFile.forEach((relativePath, zipEntry) => {
+        if (!zipEntry.dir && zipEntry.name.endsWith('.dcm')) {
+          imageEntries.push({ name: zipEntry.name, entry: zipEntry });
+        }
       });
+
+      // Ordenar las imágenes por nombre
+      imageEntries.sort((a, b) => a.name.localeCompare(b.name));
+
+      const imagePromises = imageEntries.map((imageEntry) => imageEntry.entry.async('arraybuffer'));
+
+      Promise.all(imagePromises).then((imageBuffers) => {
+        const validImages = [];
+        imageBuffers.forEach((buffer, index) => {
+          try {
+            const blob = new Blob([buffer], { type: 'application/dicom' });
+            const imageId = cornerstoneWADOImageLoader.wadouri.fileManager.add(blob);
+            validImages.push(imageId);
+          } catch (error) {
+            console.warn('No es una imagen DICOM válida:', index, error);
+          }
+        });
+
+        setImages(validImages);
+        if (validImages.length > 0) {
+          loadImage(validImages[0]);
+        }
+      });
+    }
+  };
+
+  const loadImage = (imageId) => {
+    cornerstone.loadImage(imageId).then((image) => {
+      const element = divRef.current;
+      if (element) {
+        cornerstone.displayImage(element, image);
+        updateViewport();
+      }
+    }).catch((error) => {
+      console.error('Error loading image:', error);
+    });
+  };
+
+  const handleImageChange = (index) => {
+    if (index >= 0 && index < images.length) {
+      setCurrentImageIndex(index);
+    }
+  };
+
+  const nextImage = () => {
+    if (currentImageIndex < images.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+
+  const prevImage = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
     }
   };
 
   const invertColors = () => {
     setInverted(!inverted);
     const element = divRef.current;
-    const viewport = cornerstone.getViewport(element);
-    viewport.invert = !viewport.invert;
-    cornerstone.setViewport(element, viewport);
+    if (element) {
+      const viewport = cornerstone.getViewport(element);
+      viewport.invert = !viewport.invert;
+      cornerstone.setViewport(element, viewport);
+    }
   };
 
   const handleBrightnessChange = (event) => {
@@ -67,52 +149,17 @@ const DicomViewer = () => {
 
   const updateViewport = () => {
     const element = divRef.current;
-    const viewport = cornerstone.getViewport(element);
-    if (viewport) {
-      viewport.voi.windowWidth = 256 * contrast;
-      viewport.voi.windowCenter = 128 + brightness;
-      viewport.invert = inverted;
-      cornerstone.setViewport(element, viewport);
+    if (element) {
+      const viewport = cornerstone.getViewport(element);
+      if (viewport) {
+        viewport.voi.windowWidth = 256 * contrast;
+        viewport.voi.windowCenter = 128 + brightness;
+        viewport.invert = inverted;
+        cornerstone.setViewport(element, viewport);
+      }
     }
   };
 
-  const updateRGB = (colormapName) => {
-    const element = divRef.current;
-    const viewport = cornerstone.getViewport(element);
-    const colormap = cornerstone.colors.getColormap(colormapName);
-    
-    // Ajustar los colores según el nombre del mapa de colores
-    switch(colormapName) {
-      case 'hot':
-        colormap.setColor(0, red, green, blue);
-        break;
-      case 'viridis':
-        // Cambiar a azul
-        colormap.setColor(0, red, green, blue);
-        break;
-      case 'gray':
-        // Cambiar a verde
-        colormap.setColor(0, red, green, blue);
-        break;
-      case 'blue':
-        // Cambiar a tonos azules
-        colormap.setColor(0, red, green, blue);
-        break;
-      case 'yellow':
-        // Cambiar a tonos amarillos
-        colormap.setColor(0, red, green, blue);
-        break;
-      // Agregar más casos según sea necesario para otros mapas de colores
-      default:
-        // Por defecto, mantener los mismos colores para cualquier otro mapa de colores
-        colormap.setColor(0, red, green, blue);
-    }
-    
-    viewport.colormap = colormap;
-    cornerstone.setViewport(element, viewport);
-  };
-  
-  
   const toggleBrightnessContrastControls = () => {
     setShowBrightnessContrastControls(!showBrightnessContrastControls);
   };
@@ -125,61 +172,81 @@ const DicomViewer = () => {
     setBrightness(0);
     setContrast(1);
     setInverted(false);
-    setRed(1);
-    setGreen(1);
-    setBlue(1);
     updateViewport();
+  };
+
+  const setToBlackAndWhite = () => {
+    const element = divRef.current;
+    if (element) {
+      const viewport = cornerstone.getViewport(element);
+      if (viewport) {
+        viewport.color = false;
+        cornerstone.setViewport(element, viewport);
+      }
+    }
   };
 
   return (
     <div className="container">
-      <h1>Visor DICOM</h1>
-      <label htmlFor="file-upload" className="custom-file-upload">
-        Subir Archivo DICOM
-      </label>
-      <input id="file-upload" type="file" onChange={handleFileChange} />
-      <button onClick={invertColors}>Invertir Colores</button>
-      <button onClick={toggleBrightnessContrastControls}>Brillo / Contraste</button>
-      {showBrightnessContrastControls && (
-        <div>
-          <label>
-            Brillo:
-            <input
-              type="range"
-              min="-128"
-              max="128"
-              value={brightness}
-              onChange={handleBrightnessChange}
-            />
-          </label>
-          <label>
-            Contraste:
-            <input
-              type="range"
-              min="0.1"
-              max="3"
-              step="0.1"
-              value={contrast}
-              onChange={handleContrastChange}
-            />
-          </label>
+      <div className="sidebar">
+        <h1>Visor DICOM</h1>
+        <label htmlFor="file-upload" className="custom-file-upload">
+          Subir Archivo ZIP
+        </label>
+        <input id="file-upload" type="file" accept=".zip" onChange={handleFileChange} />
+        <button onClick={invertColors}>Invertir Colores</button>
+        <button onClick={toggleBrightnessContrastControls}>Brillo / Contraste</button>
+        {showBrightnessContrastControls && (
+          <div className="control-panel">
+            <label>
+              Brillo:
+              <input
+                type="range"
+                min="-128"
+                max="128"
+                value={brightness}
+                onChange={handleBrightnessChange}
+              />
+            </label>
+            <label>
+              Contraste:
+              <input
+                type="range"
+                min="0.1"
+                max="10"
+                step="0.1"
+                value={contrast}
+                onChange={handleContrastChange}
+              />
+            </label>
+          </div>
+        )}
+        <button onClick={toggleRGBControls}>RGB</button>
+        {showRGBControls && (
+          <div className="color-map-buttons">
+            <ColorMapButton map="hotIron" />
+            <ColorMapButton map="pet" />
+            <ColorMapButton map="hsv" />
+            <ColorMapButton map="spring" />
+            <ColorMapButton map="summer" />
+            <ColorMapButton map="autumn" />
+            <ColorMapButton map="winter" />
+            <ColorMapButton map="blues" />
+            <button onClick={setToBlackAndWhite}>B/N</button>
+          </div>
+        )}
+        <button onClick={resetValues} className="default-button">Default</button>
+      </div>
+      <div className="image-viewer" ref={divRef}></div>
+      {images.length > 0 && (
+        <div className="thumbnail-gallery">
+          <button onClick={prevImage} disabled={currentImageIndex === 0}>Anterior</button>
+          <button onClick={nextImage} disabled={currentImageIndex === images.length - 1}>Siguiente</button>
         </div>
       )}
-      <button onClick={toggleRGBControls}>RGB</button>
-      {showRGBControls && (
-  <div>
-    <ColorMapButton colormapName="hot" onClick={updateRGB} />
-    <ColorMapButton colormapName="viridis" onClick={updateRGB} />
-    <ColorMapButton colormapName="gray" onClick={updateRGB} />
-    <ColorMapButton colormapName="blue" onClick={updateRGB} />
-    <ColorMapButton colormapName="yellow" onClick={updateRGB} />
-    {/* Agrega más botones según sea necesario */}
-  </div>
-)}
-
-      <div id="dicom-image" ref={divRef}></div>
     </div>
   );
 };
 
 export default DicomViewer;
+//hola
