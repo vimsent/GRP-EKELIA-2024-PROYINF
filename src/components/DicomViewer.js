@@ -23,13 +23,14 @@ const DicomViewer = () => {
   const [showRGBControls, setShowRGBControls] = useState(false);
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const imageCache = useRef({}); // Cache de imágenes
 
   useEffect(() => {
     const element = divRef.current;
     if (element) {
       cornerstone.enable(element);
 
-      // Add wheel event listener to handle image navigation
+      // Añadir el listener de la rueda del ratón para cambiar de imagen
       const handleWheel = (event) => {
         if (event.deltaY > 0) {
           nextImage();
@@ -53,8 +54,25 @@ const DicomViewer = () => {
   useEffect(() => {
     if (images.length > 0) {
       loadImage(images[currentImageIndex]);
+
+      // Precargar las imágenes anteriores y siguientes
+      prefetchImage(currentImageIndex + 1); // Siguiente imagen
+      prefetchImage(currentImageIndex - 1); // Imagen anterior
     }
   }, [currentImageIndex, images]);
+
+  const prefetchImage = (index) => {
+    if (index >= 0 && index < images.length) {
+      const imageId = images[index];
+      if (!imageCache.current[imageId]) {
+        cornerstone.loadImage(imageId).then((image) => {
+          imageCache.current[imageId] = image;
+        }).catch((error) => {
+          console.error('Error precargando imagen:', error);
+        });
+      }
+    }
+  };
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -96,15 +114,24 @@ const DicomViewer = () => {
   };
 
   const loadImage = (imageId) => {
-    cornerstone.loadImage(imageId).then((image) => {
-      const element = divRef.current;
-      if (element) {
-        cornerstone.displayImage(element, image);
-        updateViewport();
-      }
-    }).catch((error) => {
-      console.error('Error loading image:', error);
-    });
+    if (imageCache.current[imageId]) {
+      displayImage(imageCache.current[imageId]);
+    } else {
+      cornerstone.loadImage(imageId).then((image) => {
+        imageCache.current[imageId] = image;
+        displayImage(image);
+      }).catch((error) => {
+        console.error('Error cargando imagen:', error);
+      });
+    }
+  };
+
+  const displayImage = (image) => {
+    const element = divRef.current;
+    if (element) {
+      cornerstone.displayImage(element, image);
+      updateViewport();
+    }
   };
 
   const handleImageChange = (index) => {
@@ -249,4 +276,3 @@ const DicomViewer = () => {
 };
 
 export default DicomViewer;
-//hola
