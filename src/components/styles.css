@@ -17,6 +17,7 @@
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
   border-right: 2px solid #1f4068;
   overflow: hidden; /* Evita el desbordamiento */
+  position: relative; /* Necesario para posicionar el botón "default" */
 }
 
 /* Estilo del visor de imagen */
@@ -34,88 +35,6 @@
 }
 
 /* Estilo para la galería de miniaturas */
-.thumbnail-gallery {
-  width: 250px;
-  background-color: #1f4068;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-left: 2px solid #415a77;
-  overflow: hidden; /* Evita el desbordamiento */
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100%;
-}
-
-/* Galería de miniaturas */
-.thumbnail-gallery .thumbnails {
-  overflow-y: auto;
-  height: calc(100% - 40px); /* Ajusta la altura de las miniaturas */
-  width: 100%;
-}
-
-/* Estilo para las miniaturas */
-.thumbnail-gallery .thumbnail {
-  margin-bottom: 5px;
-  width: 100%;
-  height: auto;
-}
-
-/* Estilo para las imágenes en miniatura */
-.thumbnail-gallery .thumbnail img {
-  width: 100%;
-  height: auto;
-  cursor: pointer;
-  object-fit: cover;
-}
-
-/* Estilo para los botones */
-button {
-  background-color: #1f4068;
-  color: #ffffff;
-  padding: 10px 15px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-button:hover {
-  background-color: #2d4a6a;
-}
-
-.custom-file-upload {
-  cursor: pointer;
-  background-color: #1f4068;
-  color: #ffffff;
-  padding: 10px;
-  border-radius: 8px;
-  display: inline-block;
-}
-
-.control-panel label {
-  display: block;
-  margin: 10px 0;
-}
-
-.default-button {
-  background-color: #e63946;
-}
-
-.default-button:hover {
-  background-color: #d62839;
-}
-
-/* Ocultar el input file original */
-input[type="file"] {
-  display: none;
-}
-
 .thumbnail-gallery {
   width: 250px;
   background-color: #1f4068;
@@ -151,6 +70,63 @@ input[type="file"] {
   cursor: pointer;
   object-fit: cover;
 }
+
+/* Estilo para los botones */
+button {
+  background-color: #1f4068;
+  color: #ffffff;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Asegura que los botones ocupen todo el ancho del contenedor */
+  box-sizing: border-box; /* Incluye el padding y border en el tamaño total */
+}
+
+button:hover {
+  background-color: #2d4a6a;
+}
+
+.custom-file-upload {
+  background-color: #1f4068;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex; /* Cambiado de inline-block a flex */
+  align-items: center; /* Alinea verticalmente el contenido al centro */
+  justify-content: center; /* Alinea horizontalmente el contenido al centro */
+  cursor: pointer;
+  text-align: center; /* Asegura que el texto esté centrado dentro del botón */
+}
+
+
+.control-panel label {
+  display: block;
+  margin: 10px 0;
+}
+
+/* Estilo para el botón "default" */
+.default-button {
+  background-color: #e63946;
+  position: absolute;
+  bottom: 20px; /* Ajusta el espacio desde el fondo según sea necesario */
+  left: 20px; /* Ajusta el espacio desde el borde izquierdo según sea necesario */
+  width: calc(100% - 40px); /* Ancho total menos los márgenes */
+}
+
+.default-button:hover {
+  background-color: #d62839;
+}
+
+/* Ocultar el input file original */
+input[type="file"] {
+  display: none;
+}
+
 /* Estilo para las barras deslizantes (ranges) */
 input[type="range"] {
   -webkit-appearance: none;
