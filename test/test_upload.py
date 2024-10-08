@@ -12,6 +12,15 @@ class TestUploadEndpoint(unittest.TestCase):
         cls.valid_zip_file = 'test_files/valid_test.zip'  # Cambia esto a la ruta correcta
         cls.invalid_file = 'test_files/invalid_test.txt'  # Cambia esto a la ruta correcta
 
+    @classmethod
+    def tearDownClass(cls):
+        """Limpia los recursos usados en las pruebas una vez que todas han sido ejecutadas."""
+        # Si creaste archivos temporales en setUpClass o durante las pruebas, puedes eliminarlos aquí
+        if os.path.exists(cls.valid_zip_file):
+            os.remove(cls.valid_zip_file)
+        if os.path.exists(cls.invalid_file):
+            os.remove(cls.invalid_file)
+
     
     def test_upload_valid_file(self):
         """Prueba la subida de un archivo .zip válido."""
