@@ -1,162 +1,221 @@
 /* Contenedor principal dividido en sidebar a la izquierda e imagen a la derecha */
 .container {
   display: flex;
-  height: 100vh;
-  width: 100vw;
-  background-color: #1b263b;
+  height: 100vh; /* Altura total de la ventana */
+  width: 100vw;  /* Ancho total de la ventana */
+  background-color: #1b263b; /* Color de fondo del contenedor */
   overflow: hidden; /* Evita el desbordamiento */
 }
 
 /* Sidebar fijo a la izquierda */
 .sidebar {
-  width: 250px;
-  background-color: #415a77;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-  border-right: 2px solid #1f4068;
-  overflow: hidden; /* Evita el desbordamiento */
-  position: relative; /* Necesario para posicionar el botón "default" */
+  width: 250px; /* Ancho fijo del sidebar */
+  background-color: #415a77; /* Color de fondo del sidebar */
+  padding: 20px; /* Espaciado interno */
+  display: flex; /* Flexbox para organizar elementos verticalmente */
+  flex-direction: column; /* Orientación vertical */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra interna */
+  border-right: 2px solid #1f4068; /* Borde derecho */
+  position: relative; /* Posición relativa para apilar elementos */
+  z-index: 1; /* Asegura que esté sobre otros elementos */
 }
 
 /* Estilo del visor de imagen */
-.image-viewer {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #0d1b2a;
-  border: 2px solid #415a77;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-  border-radius: 8px;
-  margin: 10px;
-  position: relative;
+.viewport {
+  flex: 1; /* Toma el espacio restante del contenedor */
+  background-color: black; /* Color de fondo del visor */
+  border: 1px solid #333; /* Borde del visor */
+  margin: 10px; /* Margen alrededor del visor */
+  position: relative; /* Para manejar elementos superpuestos */
 }
 
-/* Estilo para la galería de miniaturas */
-.thumbnail-gallery {
-  width: 250px;
-  background-color: #1f4068;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-left: 2px solid #415a77;
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100%;
-  overflow-y: auto;
-}
-
-.thumbnail-gallery .thumbnails {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.thumbnail-gallery .thumbnail {
-  margin-bottom: 5px;
-  width: 100%;
-  height: auto;
-}
-
-.thumbnail-gallery .thumbnail img {
-  width: 100%;
-  height: auto;
-  cursor: pointer;
-  object-fit: cover;
-}
-
-/* Estilo para los botones */
+/* Estilo general para los botones */
 button {
-  background-color: #1f4068;
-  color: #ffffff;
-  padding: 10px 15px;
-  margin: 10px 0;
+  background-color: #1f4068; /* Color de fondo del botón */
+  color: #ffffff; /* Color del texto */
+  padding: 10px 15px; /* Espaciado interno */
+  margin: 10px 0; /* Margen vertical */
+  border: none; /* Sin borde */
+  border-radius: 8px; /* Esquinas redondeadas */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  font-size: 16px; /* Tamaño de la fuente */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+  width: 100%; /* Asegura que el botón ocupe todo el ancho del contenedor */
+  box-sizing: border-box; /* Incluye el padding y border en el tamaño total */
+}
+
+button:hover {
+  background-color: #2d4a6a; /* Color al pasar el mouse */
+}
+
+/* Input file customizado */
+.custom-file-upload {
+  background-color: #1f4068; /* Color de fondo del input */
+  color: #ffffff; /* Color del texto */
+  padding: 10px; /* Espaciado interno */
+  border-radius: 8px; /* Esquinas redondeadas */
+  text-align: center; /* Centrar el texto */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+input[type="file"] {
+  display: none; /* Ocultar el input de archivo */
+}
+
+/* Panel de controles */
+.control-panel {
+  display: flex; /* Flexbox para organizar controles verticalmente */
+  flex-direction: column; /* Orientación vertical */
+  margin: 10px 0; /* Margen vertical */
+}
+
+.control-panel label {
+  display: block; /* Hace que el label ocupe toda la línea */
+  margin: 10px 0; /* Margen vertical */
+}
+
+/* Estilo general para los inputs tipo range */
+input[type="range"] {
+  -webkit-appearance: none; /* Ocultar la apariencia por defecto en Chrome/Safari */
+  width: 100%; /* Ancho completo */
+  margin: 10px 0; /* Margen vertical */
+  background: white; /* Fondo blanco */
+  border-radius: 5px; /* Esquinas redondeadas */
+  outline: none; /* Eliminar contorno */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3); /* Sombra interna para profundidad */
+}
+
+/* Estilo para la barra del slider */
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%; /* Ancho completo */
+  height: 8px; /* Altura de la pista */
+  background: #415a77; /* Color de la pista */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+/* Estilo para el thumb del slider */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Ocultar la apariencia por defecto */
+  appearance: none; /* Ocultar la apariencia por defecto */
+  width: 20px; /* Ancho del thumb */
+  height: 20px; /* Altura del thumb */
+  border-radius: 50%; /* Hacerlo redondo */
+  background: #1f4068; /* Color del thumb */
+  cursor: pointer; /* Cambiar el cursor al pasar por encima */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* Sombra */
+}
+
+/* Estilo para el thumb en hover */
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #2d4a6a; /* Color al pasar el mouse */
+}
+
+/* Estilo para Firefox */
+input[type="range"]::-moz-range-track {
+  width: 100%; /* Ancho completo */
+  height: 8px; /* Altura de la pista */
+  background: #415a77; /* Color de la pista */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px; /* Ancho del thumb */
+  height: 20px; /* Altura del thumb */
+  border-radius: 50%; /* Hacerlo redondo */
+  background: #1f4068; /* Color del thumb */
+  cursor: pointer; /* Cambiar el cursor al pasar por encima */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* Sombra */
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  background: #2d4a6a; /* Color al pasar el mouse */
+}
+
+/* Estilo para los inputs tipo range en Edge */
+input[type="range"]::-ms-track {
+  width: 100%; /* Ancho completo */
+  height: 8px; /* Altura de la pista */
+  background: transparent; /* Fondo transparente */
+  border-color: transparent; /* Sin borde */
+  color: transparent; /* Sin color */
+}
+
+input[type="range"]::-ms-fill-lower {
+  background: #415a77; /* Color de la pista inferior */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+input[type="range"]::-ms-fill-upper {
+  background: #415a77; /* Color de la pista superior */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+input[type="range"]::-ms-thumb {
+  width: 20px; /* Ancho del thumb */
+  height: 20px; /* Altura del thumb */
+  border-radius: 50%; /* Hacerlo redondo */
+  background: #1f4068; /* Color del thumb */
+  cursor: pointer; /* Cambiar el cursor al pasar por encima */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* Sombra */
+}
+
+input[type="range"]::-ms-thumb:hover {
+  background: #2d4a6a; /* Color al pasar el mouse */
+}
+
+/* Contenedor para el slider */
+.slider-container {
+  position: relative; /* Para que la línea se coloque en relación al contenedor */
+  margin: 10px 0; /* Espaciado vertical */
+}
+
+/* Línea del slider */
+.slider-line {
+  position: absolute; /* Para que esté sobre el slider */
+  top: 50%; /* Centra la línea verticalmente */
+  left: 0; /* Inicia desde la izquierda */
+  right: 0; /* Termina en la derecha */
+  height: 2px; /* Altura de la línea */
+  background: white; /* Color de la línea */
+  z-index: -1; /* Asegura que la línea esté detrás del thumb */
+  transform: translateY(-50%); /* Ajusta la línea al centro verticalmente */
+}
+
+/* Estilos para enfoque en botones y sliders */
+button:focus {
+  outline: 2px solid #ffffff; /* Contorno visible al enfocar */
+  outline-offset: 2px; /* Espaciado del contorno */
+}
+
+input[type="range"]:focus {
+  outline: none; /* Sin contorno al enfocar */
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Sombra al enfocar */
+}
+
+/* Botón específico "default" */
+.default-button {
+  background-color: #d9534f; /* Color de fondo rojo */
+  color: #ffffff; /* Color del texto */
+  padding: 10px 15px; /* Espaciado interno */
+  margin: 20px 0;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  width: 100%; /* Asegura que los botones ocupen todo el ancho del contenedor */
-  box-sizing: border-box; /* Incluye el padding y border en el tamaño total */
-}
-
-button:hover {
-  background-color: #2d4a6a;
-}
-
-.custom-file-upload {
-  background-color: #1f4068;
-  color: #ffffff;
-  padding: 10px;
-  border-radius: 8px;
-  display: flex; /* Cambiado de inline-block a flex */
-  align-items: center; /* Alinea verticalmente el contenido al centro */
-  justify-content: center; /* Alinea horizontalmente el contenido al centro */
-  cursor: pointer;
-  text-align: center; /* Asegura que el texto esté centrado dentro del botón */
-}
-
-
-.control-panel label {
-  display: block;
-  margin: 10px 0;
-}
-
-/* Estilo para el botón "default" */
-.default-button {
-  background-color: #e63946;
-  position: absolute;
-  bottom: 20px; /* Ajusta el espacio desde el fondo según sea necesario */
-  left: 20px; /* Ajusta el espacio desde el borde izquierdo según sea necesario */
-  width: calc(100% - 40px); /* Ancho total menos los márgenes */
+  width: 100%; /* Asegura que el botón ocupe todo el ancho */
+  box-sizing: border-box;
+  margin-top: auto; /* Incluye el padding y border en el tamaño total */
 }
 
 .default-button:hover {
-  background-color: #d62839;
+  background-color: #c9302c;
+  margin-top: auto; /* Cambia el rojo cuando se pasa el ratón */
 }
 
-/* Ocultar el input file original */
-input[type="file"] {
-  display: none;
-}
-
-/* Estilo para las barras deslizantes (ranges) */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 10px;
-  background: #1f4068;
-  border-radius: 5px;
-  outline: none;
-  opacity: 0.9;
-  transition: opacity 0.3s;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  background: #ffffff;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input[type="range"]::-webkit-slider-thumb:hover {
-  background-color: #4a7c95;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-}
-
-input[type="range"]:hover {
-  opacity: 1;
+/* Usa margin-top: auto para empujar el botón al final */
+.default-button-position {
+  margin-top: auto;
 }
