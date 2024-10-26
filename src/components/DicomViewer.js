@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import cornerstone from 'cornerstone-core';
 import dicomParser from 'dicom-parser';
@@ -22,20 +21,29 @@ const DicomViewer = () => {
   const [showBrightnessContrastControls, setShowBrightnessContrastControls] = useState(false);
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [imageHeaderInfo, setImageHeaderInfo] = useState({}); // Estado para información de la cabecera
-  const imageCache = useRef({}); // Cache de imágenes
+  const [imageHeaderInfo, setImageHeaderInfo] = useState({});
+  const imageCache = useRef({});
+
+  // Nuevo estado para el arrastre
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPoint, setStartPoint] = useState(null);
 
   // Activar el visor cuando el componente está montado
-  useEffect(() => {
+   useEffect(() => {
     const element = divRef.current;
     if (element) {
       cornerstone.enable(element);
-      // Escuchar el evento 'wheel' con passive: false
       element.addEventListener('wheel', handleWheel, { passive: false });
+      element.addEventListener('mousedown', handleMouseDown);
+      element.addEventListener('mouseup', handleMouseUp);
+      element.addEventListener('mousemove', handleMouseMove);
     }
     return () => {
       cornerstone.disable(element);
       element.removeEventListener('wheel', handleWheel);
+      element.removeEventListener('mousedown', handleMouseDown);
+      element.removeEventListener('mouseup', handleMouseUp);
+      element.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
@@ -47,13 +55,43 @@ const DicomViewer = () => {
     }
   }, [currentImageIndex, images]);
 
-  // Manejador de rueda del mouse para navegar entre imágenes
+  // Manejador de rueda del mouse para hacer zoom
   const handleWheel = (event) => {
     event.preventDefault(); // Prevenir el comportamiento de desplazamiento por defecto
-    if (event.deltaY > 0) {
-      nextImage();
-    } else {
-      prevImage();
+    const element = divRef.current;
+    if (element) {
+      const viewport = cornerstone.getViewport(element);
+      const scaleChange = event.deltaY > 0 ? 0.9 : 1.1; // Cambia el zoom, ajusta según lo necesites
+      viewport.scale *= scaleChange; // Ajustar el zoom
+      cornerstone.setViewport(element, viewport);
+    }
+  };
+  
+  // Manejador para el inicio del arrastre
+  const handleMouseDown = (event) => {
+    setIsDragging(true);
+    setStartPoint({ x: event.clientX, y: event.clientY });
+  };
+
+  // Manejador para la finalización del arrastre
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setStartPoint(null);
+  };
+
+  // Manejador para el movimiento del mouse
+  const handleMouseMove = (event) => {
+    if (isDragging && startPoint) {
+      const element = divRef.current;
+      if (element) {
+        const viewport = cornerstone.getViewport(element);
+        const dx = event.clientX - startPoint.x;
+        const dy = event.clientY - startPoint.y;
+        viewport.translation.x += dx;
+        viewport.translation.y += dy;
+        cornerstone.setViewport(element, viewport);
+        setStartPoint({ x: event.clientX, y: event.clientY }); // Actualizar el punto de inicio
+      }
     }
   };
 
@@ -87,7 +125,7 @@ const DicomViewer = () => {
       }
     }
   };
-
+  
   // Procesar archivo ZIP y extraer imágenes DICOM válidas
   const processZipFile = async (file) => {
     const zip = new JSZip();
@@ -111,7 +149,7 @@ const DicomViewer = () => {
           return null;
         }
       })
-      .filter(Boolean); // Filtrar imágenes válidas
+      .filter(Boolean);
   };
 
   // Cargar imagen en el visor
@@ -120,7 +158,7 @@ const DicomViewer = () => {
       const image = imageCache.current[imageId] || await cornerstone.loadImage(imageId);
       imageCache.current[imageId] = image;
       displayImage(image);
-      extractImageHeaderInfo(imageId); // Extraer información de la cabecera
+      extractImageHeaderInfo(imageId);
     } catch (error) {
       console.error('Error cargando imagen:', error);
     }
@@ -130,32 +168,32 @@ const DicomViewer = () => {
   const extractImageHeaderInfo = (imageId) => {
     const image = imageCache.current[imageId];
     if (image && image.data) {
-      const { data } = image; // Acceder a los datos de la imagen
+      const { data } = image;
       const headerInfo = {
-        patientName: data.string('x00100010'), // Nombre del paciente
-        patientID: data.string('x00100020'), // ID del paciente
-        patientBirthDate: data.string('x00100030'), // Fecha de nacimiento del paciente
-        patientSex: data.string('x00100040'), // Sexo del paciente
-        studyInstanceUID: data.string('x0020000D'), // UID de la instancia del estudio
-        seriesInstanceUID: data.string('x0020000E'), // UID de la instancia de la serie
-        studyID: data.string('x00200010'), // ID del estudio
-        referringPhysicianName: data.string('x00080090'), // Nombre del médico remitente
-        studyDescription: data.string('x00081030'), // Descripción del estudio
-        seriesDescription: data.string('x0008103E'), // Descripción de la serie
-        imagePosition: data.string('x00200032'), // Posición de la imagen en el paciente
-        imageOrientation: data.string('x00200037'), // Orientación de la imagen en el paciente
-        sliceThickness: data.floatString('x00180050'), // Grosor del corte
-        pixelSpacing: data.string('x00280030'), // Espaciado de píxeles
-        acquisitionDate: data.string('x00080022'), // Fecha de adquisición
-        acquisitionTime: data.string('x00080032'), // Hora de adquisición
-        modality: data.string('x00080060'), // Modalidad
-        bodyPartExamined: data.string('x00180015'), // Parte del cuerpo examinada
-        manufacturer: data.string('x00080070'), // Fabricante del equipamiento
-        // Agrega más campos según sea necesario
+        patientName: data.string('x00100010'),
+        patientID: data.string('x00100020'),
+        patientBirthDate: data.string('x00100030'),
+        patientSex: data.string('x00100040'),
+        studyInstanceUID: data.string('x0020000D'),
+        seriesInstanceUID: data.string('x0020000E'),
+        studyID: data.string('x00200010'),
+        referringPhysicianName: data.string('x00080090'),
+        studyDescription: data.string('x00081030'),
+        seriesDescription: data.string('x0008103E'),
+        imagePosition: data.string('x00200032'),
+        imageOrientation: data.string('x00200037'),
+        sliceThickness: data.floatString('x00180050'),
+        pixelSpacing: data.string('x00280030'),
+        acquisitionDate: data.string('x00080022'),
+        acquisitionTime: data.string('x00080032'),
+        modality: data.string('x00080060'),
+        bodyPartExamined: data.string('x00180015'),
+        manufacturer: data.string('x00080070'),
       };
-      setImageHeaderInfo(headerInfo); // Actualizar el estado con la información de la cabecera
+      setImageHeaderInfo(headerInfo);
     }
   };
+
   // Mostrar imagen en el visor
   const displayImage = (image) => {
     const element = divRef.current;
@@ -204,14 +242,9 @@ const DicomViewer = () => {
     if (element) {
       const viewport = cornerstone.getViewport(element);
       if (viewport) {
-        // Ajustar el ancho y el centro de la VOI según el contraste y brillo
         viewport.voi.windowWidth = 256 * contrast;
         viewport.voi.windowCenter = 128 + brightness;
-  
-        // Aplicar la inversión
         viewport.invert = inverted;
-  
-        // Aplicar el viewport actualizado
         cornerstone.setViewport(element, viewport);
       }
     }
@@ -237,7 +270,6 @@ const DicomViewer = () => {
     updateViewport();
   };
 
-  // Return statement should be outside the closing brace of the previous function
   return (
     <div className="container">
       <div className="sidebar">
