@@ -24,12 +24,10 @@ const DicomViewer = () => {
   const [imageHeaderInfo, setImageHeaderInfo] = useState({});
   const imageCache = useRef({});
 
-  // Nuevo estado para el arrastre
   const [isDragging, setIsDragging] = useState(false);
   const [startPoint, setStartPoint] = useState(null);
 
-  // Activar el visor cuando el componente está montado
-   useEffect(() => {
+  useEffect(() => {
     const element = divRef.current;
     if (element) {
       cornerstone.enable(element);
@@ -47,7 +45,6 @@ const DicomViewer = () => {
     };
   }, []);
 
-  // Cargar imagen cuando cambia el índice
   useEffect(() => {
     if (images.length > 0) {
       loadImage(images[currentImageIndex]);
@@ -55,31 +52,27 @@ const DicomViewer = () => {
     }
   }, [currentImageIndex, images]);
 
-  // Manejador de rueda del mouse para hacer zoom
   const handleWheel = (event) => {
-    event.preventDefault(); // Prevenir el comportamiento de desplazamiento por defecto
+    event.preventDefault();
     const element = divRef.current;
     if (element) {
       const viewport = cornerstone.getViewport(element);
-      const scaleChange = event.deltaY > 0 ? 0.9 : 1.1; // Cambia el zoom, ajusta según lo necesites
-      viewport.scale *= scaleChange; // Ajustar el zoom
+      const scaleChange = event.deltaY > 0 ? 0.9 : 1.1;
+      viewport.scale *= scaleChange;
       cornerstone.setViewport(element, viewport);
     }
   };
   
-  // Manejador para el inicio del arrastre
   const handleMouseDown = (event) => {
     setIsDragging(true);
     setStartPoint({ x: event.clientX, y: event.clientY });
   };
 
-  // Manejador para la finalización del arrastre
   const handleMouseUp = () => {
     setIsDragging(false);
     setStartPoint(null);
   };
 
-  // Manejador para el movimiento del mouse
   const handleMouseMove = (event) => {
     if (isDragging && startPoint) {
       const element = divRef.current;
@@ -90,12 +83,11 @@ const DicomViewer = () => {
         viewport.translation.x += dx;
         viewport.translation.y += dy;
         cornerstone.setViewport(element, viewport);
-        setStartPoint({ x: event.clientX, y: event.clientY }); // Actualizar el punto de inicio
+        setStartPoint({ x: event.clientX, y: event.clientY });
       }
     }
   };
 
-  // Precargar imágenes adyacentes
   const prefetchAdjacentImages = () => {
     prefetchImage(currentImageIndex + 1);
     prefetchImage(currentImageIndex - 1);
@@ -112,7 +104,6 @@ const DicomViewer = () => {
     }
   };
 
-  // Manejador para carga de archivos ZIP
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -126,7 +117,6 @@ const DicomViewer = () => {
     }
   };
   
-  // Procesar archivo ZIP y extraer imágenes DICOM válidas
   const processZipFile = async (file) => {
     const zip = new JSZip();
     const zipContent = await file.arrayBuffer();
@@ -152,7 +142,6 @@ const DicomViewer = () => {
       .filter(Boolean);
   };
 
-  // Cargar imagen en el visor
   const loadImage = async (imageId) => {
     try {
       const image = imageCache.current[imageId] || await cornerstone.loadImage(imageId);
@@ -164,10 +153,9 @@ const DicomViewer = () => {
     }
   };
 
-  // Extraer información de la cabecera de la imagen DICOM
   const extractImageHeaderInfo = (imageId) => {
     const image = imageCache.current[imageId];
-    if (image && image.data) {
+    if (image?.data) {
       const { data } = image;
       const headerInfo = {
         patientName: data.string('x00100010'),
@@ -194,7 +182,6 @@ const DicomViewer = () => {
     }
   };
 
-  // Mostrar imagen en el visor
   const displayImage = (image) => {
     const element = divRef.current;
     if (element) {
@@ -207,24 +194,9 @@ const DicomViewer = () => {
     }
   };
 
-  // Navegación entre imágenes
-  const nextImage = () => setCurrentImageIndex((prev) => Math.min(prev + 1, images.length - 1));
-  const prevImage = () => setCurrentImageIndex((prev) => Math.max(prev - 1, 0));
-
-  // Controles de brillo, contraste e inversión
   const invertColors = () => {
     setInverted((prev) => !prev);
     updateViewport();
-  };
-  const setToBlackAndWhite = () => {
-    const element = divRef.current;
-    if (element) {
-      const viewport = cornerstone.getViewport(element);
-      if (viewport) {
-        viewport.color = false;
-        cornerstone.setViewport(element, viewport);
-      }
-    }
   };
 
   const handleBrightnessChange = (event) => {
@@ -250,14 +222,11 @@ const DicomViewer = () => {
     }
   };
 
-  // Alternar visibilidad de controles
   const toggleBrightnessContrastControls = () => setShowBrightnessContrastControls((prev) => !prev);
 
-  // Calcular la posición de la barra de progreso
-  const progressBarHeight = '20px'; // Alto fijo
-  const progressBarTop = `${(currentImageIndex / (images.length - 1)) * 100}%`; // Cambia a 100% basado en el índice
+  const progressBarHeight = '20px';
+  const progressBarTop = `${(currentImageIndex / (images.length - 1)) * 100}%`;
 
-  // Manejador para la barra de progreso
   const handleProgressChange = (event) => {
     const newIndex = parseInt(event.target.value, 10);
     setCurrentImageIndex(newIndex);
@@ -310,9 +279,17 @@ const DicomViewer = () => {
       <div
         className="viewport"
         ref={divRef}
-        style={{  overflow: 'hidden',width: '100%', height: '80vh', position: 'relative' }}
-        tabIndex={0}
+        style={{
+        overflow: 'hidden',
+        width: '100%',
+        height: '80vh',
+        position: 'relative',
+        maxWidth: '700px',
+        maxHeight: '700px',
+        }}
+        role="region"
       >
+
         <div className="progress-bar-container">
           <div
             className="progress-bar"
@@ -327,10 +304,9 @@ const DicomViewer = () => {
           onChange={handleProgressChange}
           style={{ width: '100%' }}
         />
-        
       </div>
       <div className="image-header-info" style={{ color: '#fff' }}>
-      <h2>Información de la Cabecera:</h2>
+        <h2>Información de la Cabecera:</h2>
         <ul>
           <li>Nombre del Paciente: {imageHeaderInfo.patientName || 'N/A'}</li>
           <li>ID del Paciente: {imageHeaderInfo.patientID || 'N/A'}</li>
@@ -355,7 +331,6 @@ const DicomViewer = () => {
       </div>
     </div>
   );
-  
 };
 
 export default DicomViewer;
